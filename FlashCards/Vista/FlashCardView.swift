@@ -7,12 +7,115 @@
 
 import SwiftUI
 
-struct FlashCardView: View {
+// VISTA
+// La vista se encarga solo de lo VISUAL: muestra los datos del ViewModel
+// y le avisa cuando el usuario toca algo. No contiene lógica propia.
+struct FlashCardsView: View {
+
+    // @StateObject crea el ViewModel UNA sola vez y lo mantiene vivo
+    // mientras la vista exista. Si la vista se redibuja, el ViewModel
+    // (y su estado, como el índice actual) no se pierde.
+    @StateObject private var viewModel: FlashCardsViewModel
+
+    // Inicializador personalizado: recibimos las tarjetas y con ellas
+    // creamos el ViewModel.
+    // El guion bajo en `_viewModel` accede al "contenedor" de @StateObject;
+    // es la forma de darle un valor inicial desde un `init`.
+    init(tarjetas: [FlashCard]) {
+        _viewModel = StateObject(
+            wrappedValue: FlashCardsViewModel(tarjetas: tarjetas)
+        )
+    }
+
+    // `body` describe lo que se ve en pantalla. SwiftUI lo vuelve a
+    // ejecutar automáticamente cada vez que cambia un dato @Published.
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        // VStack acomoda los elementos uno debajo de otro.
+        // `spacing: 24` es la separación entre cada elemento.
+        VStack(spacing: 24) {
+
+            // `if let` intenta "desempaquetar" el opcional:
+            // si hay una tarjeta, la guarda en `tarjeta` y entra al bloque;
+            // si es `nil`, se va al `else`.
+            if let tarjeta = viewModel.tarjetaActual {
+
+                // Contador. Sumamos 1 porque el índice empieza en 0,
+                // pero para el usuario la primera tarjeta es la "1".
+                // `\( )` inserta el valor de una variable dentro del texto.
+                Text(
+                    "Tarjeta \(viewModel.indiceActual + 1) de \(viewModel.tarjetas.count)"
+                )
+                .font(.subheadline)
+                .foregroundStyle(.secondary)  // Color gris, menos llamativo.
+
+                // La tarjeta completa es un botón: al tocarla se voltea.
+                Button {
+                    // Acción: lo que pasa al tocar el botón.
+                    viewModel.voltear()
+                } label: {
+                    // Label: lo que se ve dentro del botón.
+                    VStack(spacing: 16) {
+
+                        // Operador ternario:  condición ? siVerdadero : siFalso
+                        // Muestra la etiqueta según el lado de la tarjeta.
+                        Text(
+                            viewModel.mostrandoRespuesta
+                                ? "Respuesta"
+                                : "Pregunta"
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                        // Texto principal: la pregunta o la respuesta.
+                        Text(
+                            viewModel.mostrandoRespuesta
+                                ? tarjeta.respuesta
+                                : tarjeta.pregunta
+                        )
+                        .font(.title2)
+                        .foregroundStyle(.primary)
+                        .multilineTextAlignment(.center)  // Centra textos largos.
+                    }
+                    // Los modificadores se aplican en orden, de arriba hacia abajo.
+                    .padding()                         // Espacio interno.
+                    .frame(maxWidth: .infinity)        // Ocupa todo el ancho.
+                    .frame(minHeight: 240)             // Altura mínima de la tarjeta.
+                    .background(
+                        .blue.opacity(0.12),           // Azul muy transparente.
+                        in: RoundedRectangle(cornerRadius: 24)  // Esquinas redondeadas.
+                    )
+                }
+                // `.plain` quita el estilo azul por defecto de los botones,
+                // para que se vea como una tarjeta y no como un enlace.
+                .buttonStyle(.plain)
+
+                // Instrucción para el usuario.
+                Text("Toca la tarjeta para voltearla")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                // Botón para pasar a la siguiente tarjeta.
+                Button("Siguiente") {
+                    viewModel.siguiente()
+                }
+                .buttonStyle(.borderedProminent)  // Botón relleno y destacado.
+
+            } else {
+                // Se muestra solo si el arreglo de tarjetas está vacío.
+                Text("No hay tarjetas disponibles")
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding()  // Margen alrededor de todo el contenido.
     }
 }
 
+// PREVIEW
+// Permite ver la vista en el Canvas de Xcode sin correr la app.
+// Le pasamos unas tarjetas de ejemplo porque la vista las necesita.
 #Preview {
-    SwiftUIView()
+    FlashCardsView(tarjetas: [
+        FlashCard(pregunta: "¿Qué es SwiftUI?", respuesta: "Un framework declarativo para crear interfaces gráficas."),
+        FlashCard(pregunta: "¿Para qué sirve @State?", respuesta: "Para guardar estado local en una vista.")
+    ])
 }
