@@ -101,4 +101,18 @@ final class FlashCardsViewModel: ObservableObject {
         // Cada tarjeta nueva empieza mostrando la pregunta.
         mostrandoRespuesta = false
     }
+
+    // Regresa a la tarjeta anterior.
+    func anterior() {
+        // Si el arreglo está vacío, no hacemos nada.
+        guard !tarjetas.isEmpty else { return }
+
+        // Sumamos `tarjetas.count` antes del módulo para no obtener un
+        // número negativo. Así, desde la primera tarjeta (0) saltamos
+        // a la última. Ejemplo con 3 tarjetas: 0 → 2 → 1 → 0 → ...
+        indiceActual = (indiceActual - 1 + tarjetas.count) % tarjetas.count
+
+        // Cada tarjeta empieza mostrando la pregunta.
+        mostrandoRespuesta = false
+    }
 }

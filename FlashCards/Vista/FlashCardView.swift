@@ -81,9 +81,14 @@ struct FlashCardsView: View {
                     .frame(maxWidth: .infinity)        // Ocupa todo el ancho.
                     .frame(minHeight: 240)             // Altura mínima de la tarjeta.
                     .background(
-                        .blue.opacity(0.12),           // Azul muy transparente.
+                        // Color según el lado: verde para la respuesta,
+                        // azul para la pregunta (ambos muy transparentes).
+                        (viewModel.mostrandoRespuesta ? Color.green : Color.blue)
+                            .opacity(0.12),
                         in: RoundedRectangle(cornerRadius: 24)  // Esquinas redondeadas.
                     )
+                    // Anima el cambio de color al voltear la tarjeta.
+                    .animation(.easeInOut, value: viewModel.mostrandoRespuesta)
                 }
                 // `.plain` quita el estilo azul por defecto de los botones,
                 // para que se vea como una tarjeta y no como un enlace.
@@ -94,11 +99,20 @@ struct FlashCardsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                // Botón para pasar a la siguiente tarjeta.
-                Button("Siguiente") {
-                    viewModel.siguiente()
+                // HStack acomoda los botones uno al lado del otro.
+                HStack(spacing: 16) {
+                    // Botón para regresar a la tarjeta anterior.
+                    Button("Anterior") {
+                        viewModel.anterior()
+                    }
+                    .buttonStyle(.bordered)  // Botón con borde, menos destacado.
+
+                    // Botón para pasar a la siguiente tarjeta.
+                    Button("Siguiente") {
+                        viewModel.siguiente()
+                    }
+                    .buttonStyle(.borderedProminent)  // Botón relleno y destacado.
                 }
-                .buttonStyle(.borderedProminent)  // Botón relleno y destacado.
 
             } else {
                 // Se muestra solo si el arreglo de tarjetas está vacío.
