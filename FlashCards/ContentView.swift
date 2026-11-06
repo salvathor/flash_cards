@@ -25,9 +25,33 @@ struct ContentView: View {
     // `some View` significa "algún tipo de vista" (SwiftUI deduce el tipo exacto).
     var body: some View {
 
+        // MARK: - SCROLL VIEW
+        // `ScrollView` es un contenedor que permite desplazar su contenido
+        // cuando este es más grande que el espacio disponible en pantalla.
+        //
+        // ¿Cómo funciona?
+        // - Por defecto el desplazamiento es VERTICAL (`.vertical`), es decir,
+        //   el usuario arrastra el dedo hacia arriba o hacia abajo.
+        //   Escribir `ScrollView { }` equivale a `ScrollView(.vertical) { }`.
+        //   Si quisiéramos desplazar hacia los lados usaríamos `ScrollView(.horizontal)`.
+        // - El ScrollView le ofrece a su contenido una altura "ilimitada", así que
+        //   el VStack puede medir lo que necesite; si mide más que la pantalla,
+        //   el excedente se alcanza deslizando.
+        // - Si el contenido SÍ cabe en pantalla, no hay nada que desplazar y la
+        //   vista se comporta casi igual que sin ScrollView (solo rebota al arrastrar).
+        // - Muestra automáticamente un indicador (barra delgada) mientras se desliza.
+        //
+        // ¿Por qué lo necesitamos aquí?
+        // Al girar el teléfono o el simulador a horizontal (izquierda o derecha),
+        // la altura disponible se reduce mucho y los controles de abajo
+        // (TextField, Toggle, Slider) quedarían fuera de la pantalla sin poder tocarlos.
+        // Con el ScrollView el usuario puede deslizar para llegar a ellos.
+        ScrollView {
+
         // MARK: - VERTICAL STACK
         // `VStack` acomoda sus elementos uno debajo de otro (en vertical).
-        VStack{
+        // `spacing: 16` separa los elementos para que sea más fácil tocarlos.
+        VStack(spacing: 16){
             // MARK: - BOTON SIMPLE
             // El primer parámetro es el texto del botón y el bloque entre llaves { }
             // es la acción que se ejecuta cuando el usuario lo toca.
@@ -52,7 +76,9 @@ struct ContentView: View {
                     .cornerRadius(20)           // Redondea las esquinas
             }
             // `frame` define el tamaño del área que ocupa la vista.
-            .frame(width: 220)
+            // `maxWidth` deja que se adapte al ancho disponible sin pasar de 400,
+            // así se ve bien tanto en vertical como en horizontal.
+            .frame(maxWidth: 400)
 
             // MARK: - IMAGEN CON ZSTACK
             // `ZStack` encima las vistas una sobre otra (en profundidad).
@@ -72,7 +98,8 @@ struct ContentView: View {
                     .frame(width: 200, height: 200)
                     .cornerRadius(100)
             }
-            .frame(width: 220)
+            // Ocupa todo el ancho disponible para que el círculo quede centrado.
+            .frame(maxWidth: .infinity)
 
             // MARK: - TEXTFIELD
             // Campo para que el usuario escriba texto.
@@ -83,7 +110,7 @@ struct ContentView: View {
             TextField("Ingresa un texto", text:$texto)
                 .textFieldStyle(.roundedBorder) // Estilo con borde redondeado
                 .padding()
-                .frame(width: 220)
+                .frame(maxWidth: 400)
 
             // MARK: - TOGGLE
             // Un VStack dentro de otro VStack: podemos anidar contenedores
@@ -99,7 +126,7 @@ struct ContentView: View {
                 Text("El estado es: \(stateToggle ? "Activado" : "Desactivado")")
                     .padding()
             }
-            .frame(width: 220)
+            .frame(maxWidth: 400)
 
             // MARK: - DIVIDER
             // Dibuja una línea delgada para separar visualmente secciones.
@@ -112,7 +139,15 @@ struct ContentView: View {
             // El valor elegido se guarda en `fontSize` gracias al binding `$fontSize`.
             Slider(value: $fontSize, in: 10...50, step: 1)
                 .padding()
-                .frame(width: 220)
+                .frame(maxWidth: 400)
+        }
+        // El VStack ocupa todo el ancho de la pantalla y deja un margen alrededor.
+        .frame(maxWidth: .infinity)
+        .padding()
+
+        // MARK: - FIN DEL SCROLL VIEW
+        // Esta llave cierra el ScrollView: todo lo que está entre `ScrollView {`
+        // y esta llave es el contenido que se puede desplazar.
         }
 
     }

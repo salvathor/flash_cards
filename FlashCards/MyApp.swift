@@ -10,8 +10,8 @@ import SwiftUI
         // WindowGroup crea la ventana principal.
         WindowGroup {
             // Primera vista que se muestra al abrir la app.
-            //ContentView()
-            FlashCardContentView()
+            ContentView()
+            //FlashCardContentView()
         }
     }
 }
