@@ -1,6 +1,6 @@
 //
-//  SwiftUIView.swift
-//  MyApp
+//  FlashCardView.swift
+//  FlashCards
 //
 //  Created by Salvador Lopez on 05/11/26.
 //
@@ -12,9 +12,8 @@ import SwiftUI
 // y le avisa cuando el usuario toca algo. No contiene lógica propia.
 struct FlashCardsView: View {
 
-    // @StateObject crea el ViewModel UNA sola vez y lo mantiene vivo
-    // mientras la vista exista. Si la vista se redibuja, el ViewModel
-    // (y su estado, como el índice actual) no se pierde.
+    // @StateObject conserva el ViewModel mientras se mantenga la identidad de la vista.
+    // Así se conserva la tarjeta seleccionada cuando SwiftUI actualiza la interfaz.
     @StateObject private var viewModel: FlashCardsViewModel
 
     // Inicializador personalizado: recibimos las tarjetas y con ellas
@@ -27,8 +26,7 @@ struct FlashCardsView: View {
         )
     }
 
-    // `body` describe lo que se ve en pantalla. SwiftUI lo vuelve a
-    // ejecutar automáticamente cada vez que cambia un dato @Published.
+    // `body` describe la interfaz a partir del estado observable del ViewModel.
     var body: some View {
         // VStack acomoda los elementos uno debajo de otro.
         // `spacing: 24` es la separación entre cada elemento.
@@ -46,7 +44,7 @@ struct FlashCardsView: View {
                     "Tarjeta \(viewModel.indiceActual + 1) de \(viewModel.tarjetas.count)"
                 )
                 .font(.subheadline)
-                .foregroundStyle(.secondary)  // Color gris, menos llamativo.
+                .foregroundStyle(.secondary)  // Estilo secundario adaptado al entorno.
 
                 // La tarjeta completa es un botón: al tocarla se voltea.
                 Button {
@@ -90,8 +88,7 @@ struct FlashCardsView: View {
                     // Anima el cambio de color al voltear la tarjeta.
                     .animation(.easeInOut, value: viewModel.mostrandoRespuesta)
                 }
-                // `.plain` quita el estilo azul por defecto de los botones,
-                // para que se vea como una tarjeta y no como un enlace.
+                // `.plain` conserva la apariencia personalizada de la tarjeta.
                 .buttonStyle(.plain)
 
                 // Instrucción para el usuario.
@@ -115,7 +112,7 @@ struct FlashCardsView: View {
                 }
 
             } else {
-                // Se muestra solo si el arreglo de tarjetas está vacío.
+                // Se muestra cuando el ViewModel no devuelve una tarjeta válida.
                 Text("No hay tarjetas disponibles")
                     .foregroundStyle(.secondary)
             }

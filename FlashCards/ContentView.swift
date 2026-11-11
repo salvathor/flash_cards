@@ -3,7 +3,8 @@
 import SwiftUI
 
 // Una vista en SwiftUI es una estructura (struct) que cumple con el protocolo `View`.
-// `ContentView` es la vista principal que muestra varios controles de ejemplo.
+// `ContentView` es una vista de práctica con controles de ejemplo.
+// La app inicia en `FlashCardContentView`; esta vista se puede explorar en el Canvas.
 struct ContentView: View {
 
     // MARK: - PROPIEDADES DE ESTADO
@@ -15,7 +16,7 @@ struct ContentView: View {
     @State private var texto: String = ""
     // Guarda si el Toggle (interruptor) está encendido (true) o apagado (false).
     @State private var stateToggle = false
-    // Guarda el tamaño de fuente que controla el Slider.
+    // Guarda el valor del Slider; actualmente no se aplica a ningún texto.
     // `CGFloat` es un tipo numérico decimal usado para medidas en pantalla.
     @State private var fontSize: CGFloat = 20.00
 

@@ -7,10 +7,9 @@ import SwiftUI
 
     // `body` define las "escenas" (ventanas) de la app.
     var body: some Scene {
-        // WindowGroup crea la ventana principal.
+        // WindowGroup define la escena que presenta la pantalla de estudio.
         WindowGroup {
-            // Primera vista que se muestra al abrir la app.
-            //ContentView()
+            // Vista inicial: conecta el catálogo de tarjetas con la interfaz de estudio.
             FlashCardContentView()
         }
     }

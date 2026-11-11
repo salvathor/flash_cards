@@ -1,6 +1,6 @@
 //
-//  Flashcard.swift
-//  MyApp
+//  FlashCard.swift
+//  FlashCards
 //
 //  Created by Salvador Lopez on 05/11/26.
 //
@@ -15,11 +15,11 @@ import Foundation
 // cada copia es independiente.
 //
 // `Identifiable` es un protocolo que obliga a tener una propiedad `id`.
-// SwiftUI lo usa para distinguir una tarjeta de otra (por ejemplo, en listas).
+// Permite distinguir tarjetas por identidad si se usan en listas o ForEach.
 struct FlashCard: Identifiable {
 
-    // Identificador único. `UUID()` genera un valor aleatorio distinto
-    // cada vez que se crea una tarjeta.
+    // Identidad generada al crear la tarjeta; se conserva al copiar este valor.
+    // No se persiste entre ejecuciones de la app.
     let id = UUID()
 
     // Texto que se muestra al frente de la tarjeta.
@@ -28,6 +28,6 @@ struct FlashCard: Identifiable {
     // Texto que se muestra al voltear la tarjeta.
     let respuesta: String
 
-    // Nota: no escribimos un `init`. Los structs generan uno automáticamente:
+    // Al no declarar un inicializador propio, Swift genera uno para estas propiedades:
     // FlashCard(pregunta: "...", respuesta: "...")
 }

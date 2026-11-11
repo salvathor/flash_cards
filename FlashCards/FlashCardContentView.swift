@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  FlashCardContentView.swift
 //  FlashCards
 //
 //  Created by Salvador Lopez on 05/11/26.
@@ -8,20 +8,15 @@
 import SwiftUI
 
 // VISTA CONTENEDORA
-// Esta vista prepara los datos (la lista de tarjetas) y se los entrega
-// a `FlashCardsView`, que es la que realmente los muestra.
-// Separar "quién tiene los datos" de "quién los dibuja" hace que
-// `FlashCardsView` se pueda reutilizar con cualquier lista de tarjetas.
+// Esta vista obtiene las tarjetas de `FlashCardData` y las entrega
+// a `FlashCardsView`, que presenta la sesión de estudio.
+// El catálogo queda separado de la interfaz para reutilizar la vista con otras tarjetas.
 struct FlashCardContentView: View {
 
-    // Arreglo con todas las tarjetas de estudio.
-    // `private` = solo esta vista puede usarlo.
-    // `let` = es una constante, no cambia mientras la app corre.
-    // `[FlashCard]` = "un arreglo de elementos de tipo FlashCard".
-    // Cada elemento se crea con FlashCard(pregunta:respuesta:) y se separa con coma.
+    // La lista se define en Model/FlashCardData.swift.
     
     var body: some View {
-        // Mostramos la vista de tarjetas y le pasamos nuestro arreglo.
+        // `tarjetas` es una propiedad estática: se consulta sin crear una instancia.
         FlashCardsView(tarjetas: FlashCardData.tarjetas)
     }
 }

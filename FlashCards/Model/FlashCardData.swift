@@ -4,7 +4,11 @@
 //
 //  Created by Salvador Lopez on 11/11/26.
 //
+// Catálogo de preguntas y respuestas utilizado por la pantalla de estudio.
+// El enum sin casos agrupa los datos sin necesitar instancias.
 enum FlashCardData {
+    // Colección compartida que se inicializa en el primer acceso.
+    // Para agregar una tarjeta, añade un FlashCard(pregunta:respuesta:) al arreglo.
     static let tarjetas: [FlashCard] = [
         
         FlashCard(pregunta: "Swift es un lenguaje de programación de tipo seguro que fue desarrollado por Apple para reemplazar Objective-C en el desarrollo de aplicaciones iOS", respuesta: "VERDADERO"),
